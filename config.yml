@@ -1,0 +1,35 @@
+version: 1
+jobs:
+  build:
+    machine:
+      image: ubuntu-2204:2022.04.2
+
+    working directory: ~/app
+    steps:
+      #git pull
+      - checkout
+      #downloasd and cache dependencies
+      - restore_cache:
+          keys:
+            - app - {{checksum "pom.xml"}}
+      - run: maven dependency:go-offline
+      - save cache:
+          paths:
+            - -/m2
+        key: app- {{ checksum "pom.xml"}}
+
+      #package in a jar
+      - run:
+          name: Packaging
+          command: mvn clean package
+
+      - run:
+        name: Setting up docker
+        command:  |
+          echo $DOCKER-PASS | docker login --username $DOCKER_USER --password-stdin
+
+      - run:
+          name: Push app to Dokerhub
+          command: |
+            docker build --tag=valopurm/oxygen-app:latest .
+            docker push valopurm/oxygen-app:latest

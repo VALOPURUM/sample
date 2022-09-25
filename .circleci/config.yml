@@ -16,7 +16,7 @@ jobs:
       - save cache:
           paths:
             - ~/.m2
-        key: app- {{ checksum "pom.xml"}}
+          key: app- {{ checksum "pom.xml"}}
 
       #package in a jar
       - run:

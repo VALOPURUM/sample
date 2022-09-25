@@ -15,7 +15,7 @@ jobs:
       - run: maven dependency:go-offline
       - save cache:
           paths:
-            - -/m2
+            - ~/.m2
         key: app- {{ checksum "pom.xml"}}
 
       #package in a jar

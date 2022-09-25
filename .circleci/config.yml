@@ -11,8 +11,9 @@ jobs:
       #downloasd and cache dependencies
       - restore_cache:
           keys:
-            - app- {{checksum "pom.xml"}}
-      - run: maven dependency:go-offline
+            - app- {{ checksum "pom.xml" }}
+
+      - run: mvn dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
